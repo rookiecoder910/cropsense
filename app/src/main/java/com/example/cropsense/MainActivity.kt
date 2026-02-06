@@ -29,13 +29,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(viewModel: MainViewModel = viewModel()) {
 
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    /* -------- Gallery Picker -------- */
     val imagePickerLauncher =
         rememberLauncherForActivityResult(
             ActivityResultContracts.GetContent()
@@ -43,7 +43,6 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
             imageUri = uri
         }
 
-    /* -------- Camera Picker -------- */
     val cameraLauncher =
         rememberLauncherForActivityResult(
             ActivityResultContracts.TakePicturePreview()
@@ -53,68 +52,127 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
             }
         }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Text(
-            text = "CropSense",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Spacer(Modifier.height(20.dp))
-
-        Row {
-            Button(onClick = {
-                imagePickerLauncher.launch("image/*")
-            }) {
-                Text("Gallery")
-            }
-
-            Spacer(Modifier.width(12.dp))
-
-            Button(onClick = {
-                cameraLauncher.launch(null)
-            }) {
-                Text("Camera")
-            }
-        }
-
-        Spacer(Modifier.height(20.dp))
-
-        imageUri?.let {
-            Image(
-                painter = rememberAsyncImagePainter(it),
-                contentDescription = null,
-                modifier = Modifier.size(220.dp)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("CropSense 🌱") }
             )
+        }
+    ) { padding ->
 
-            Spacer(Modifier.height(12.dp))
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            Button(onClick = {
-                viewModel.uploadImage(context, it)
-            }) {
-                Text("Predict")
+            /* ---------- IMAGE CARD ---------- */
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp),
+                elevation = CardDefaults.cardElevation(6.dp)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (imageUri == null) {
+                        Text(
+                            text = "No image selected",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    } else {
+                        Image(
+                            painter = rememberAsyncImagePainter(imageUri),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
             }
-        }
 
-        Spacer(Modifier.height(20.dp))
-
-        if (viewModel.loading.value) {
-            CircularProgressIndicator()
-        }
-
-        viewModel.result.value?.let {
             Spacer(Modifier.height(16.dp))
-            Text("Crop: ${it.crop}")
-            Text("Disease: ${it.disease}")
-            Text("Confidence: ${(it.confidence * 100).toInt()}%")
+
+            /* ---------- ACTION BUTTONS ---------- */
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                OutlinedButton(
+                    onClick = { imagePickerLauncher.launch("image/*") }
+                ) {
+                    Text("Gallery")
+                }
+
+                OutlinedButton(
+                    onClick = { cameraLauncher.launch(null) }
+                ) {
+                    Text("Camera")
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            /* ---------- PREDICT BUTTON ---------- */
+            Button(
+                onClick = {
+                    imageUri?.let {
+                        viewModel.uploadImage(context, it)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = imageUri != null && !viewModel.loading.value
+            ) {
+                Text("Predict Disease")
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            /* ---------- LOADING ---------- */
+            if (viewModel.loading.value) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator()
+                    Spacer(Modifier.height(8.dp))
+                    Text("Analyzing image…")
+                }
+            }
+
+            /* ---------- RESULT CARD ---------- */
+            viewModel.result.value?.let { result ->
+                Spacer(Modifier.height(16.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Prediction Result",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Spacer(Modifier.height(12.dp))
+
+                        Text("🌾 Crop: ${result.crop}")
+                        Text("🦠 Disease: ${result.disease}")
+                        Text(
+                            "📊 Confidence: ${(result.confidence * 100).toInt()}%",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
         }
     }
 }
+
 
 /* -------- Save Camera Bitmap -------- */
 

@@ -22,19 +22,31 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             loading.value = true
             try {
+                println("➡️ Upload started")
+
                 val imagePart = uriToMultipart(context, uri)
+
                 val response =
                     RetrofitClient.api.predictDisease(imagePart)
 
+                println("⬅️ Response received")
+                println("HTTP code: ${response.code()}")
+
                 if (response.isSuccessful) {
+                    println("✅ Success body: ${response.body()}")
                     result.value = response.body()
+                } else {
+                    println("❌ Error body: ${response.errorBody()?.string()}")
                 }
+
             } catch (e: Exception) {
+                println("🔥 Exception occurred")
                 e.printStackTrace()
             }
             loading.value = false
         }
     }
+
 }
 
 /* -------- IMAGE → MULTIPART -------- */
