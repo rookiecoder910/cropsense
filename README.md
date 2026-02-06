@@ -1,7 +1,8 @@
 # 🌱 CropSense
 
 <p align="center">
-  <img src="screenshots/app_ui.jpg" alt="CropSense App Screenshot" width="300"/>
+![crop](https://github.com/user-attachments/assets/2941869b-9371-4f21-99bc-f54a555cdf18)
+
 </p>
 
 <p align="center">
