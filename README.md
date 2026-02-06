@@ -1,11 +1,13 @@
 # 🌱 CropSense
 
 <p align="center">
-
-![crop](https://github.com/user-attachments/assets/d7854955-fad3-4f89-9012-7108bf3cfe08)
-
-
+  <img 
+    src="https://github.com/user-attachments/assets/d7854955-fad3-4f89-9012-7108bf3cfe08"
+    alt="CropSense App"
+    width="350"
+  />
 </p>
+
 
 <p align="center">
   <strong>AI-Powered Crop Disease Detection for Farmers</strong>
