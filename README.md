@@ -269,7 +269,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Manas Kumar**  
 Android & Machine Learning Enthusiast
 
-- 📧 Email: your.email@example.com
+- 📧 Email: manasydv123@gmail.com
 - 💼 LinkedIn: (https://www.linkedin.com/in/manas-kumar-yadav-26013a287/)
 - 🐦 Twitter: (https://x.com/_momstealer)
 - 🌐 Portfolio: (https://rookiecoder910.github.io/my-portfolio/)
