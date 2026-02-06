@@ -49,7 +49,7 @@ class MainViewModel : ViewModel() {
 
 }
 
-/* -------- IMAGE → MULTIPART -------- */
+
 
 fun uriToMultipart(
     context: Context,
@@ -67,7 +67,7 @@ fun uriToMultipart(
         file.asRequestBody("image/*".toMediaType())
 
     return MultipartBody.Part.createFormData(
-        "file",          // MUST be "file" for FastAPI
+        "file",
         file.name,
         requestBody
     )

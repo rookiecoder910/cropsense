@@ -51,7 +51,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     //viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-
+    implementation("androidx.compose.material:material-icons-extended:1.6.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
