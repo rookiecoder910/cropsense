@@ -1,9 +1,16 @@
 # 🌱 CropSense
+<p align="center">
+  <img 
+    src="https://github.com/user-attachments/assets/cee646fc-099a-49ee-ac13-59052076883a"
+    alt="CropSense Logo"
+    width="180"
+  />
+</p>
 
 <p align="center">
   <img 
     src="https://github.com/user-attachments/assets/d7854955-fad3-4f89-9012-7108bf3cfe08"
-    alt="CropSense App"
+    alt="CropSense App Screenshot"
     width="350"
   />
 </p>
