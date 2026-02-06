@@ -1,7 +1,8 @@
 # 🌱 CropSense
 
 <p align="center">
-![crop](https://github.com/user-attachments/assets/2941869b-9371-4f21-99bc-f54a555cdf18)
+[crop](https://github.com/user-attachments/assets/34b8a119-2909-46fe-9809-7749c078f8ef)
+
 
 </p>
 
