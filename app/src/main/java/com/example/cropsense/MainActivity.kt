@@ -269,106 +269,136 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
 
 
             viewModel.result.value?.let { result ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface
-                    ),
-                    elevation = CardDefaults.cardElevation(0.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(20.dp)
+                if (result.is_leaf == false) {
+                    // Show Non-Leaf Error Card
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer
+                        ),
+                        elevation = CardDefaults.cardElevation(0.dp)
                     ) {
-                        Text(
-                            text = "Results",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-
-                        Spacer(Modifier.height(20.dp))
-
-                        // Crop
-                        Column(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.padding(20.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
-                                text = "Crop",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Normal
+                                text = "⚠️",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.padding(end = 12.dp)
                             )
-                            Spacer(Modifier.height(6.dp))
                             Text(
-                                text = result.crop,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
+                                text = result.message ?: "Please upload a leaf image for correct diagnosis",
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Medium
                             )
                         }
-
-                        Spacer(Modifier.height(16.dp))
-
-                        // Disease
-                        Column(modifier = Modifier.fillMaxWidth()) {
+                    }
+                } else if (result.crop != null && result.disease != null && result.confidence != null) {
+                    // Show Valid Disease Result Card
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        ),
+                        elevation = CardDefaults.cardElevation(0.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(20.dp)
+                        ) {
                             Text(
-                                text = "Disease",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Normal
+                                text = "Results",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
-                            Spacer(Modifier.height(6.dp))
-                            Text(
-                                text = result.disease,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontWeight = FontWeight.Medium,
-                                lineHeight = MaterialTheme.typography.titleMedium.lineHeight
-                            )
-                        }
 
-                        Spacer(Modifier.height(16.dp))
+                            Spacer(Modifier.height(20.dp))
 
-                        // Confidence
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "Confidence",
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Normal
-                            )
-                            Spacer(Modifier.height(6.dp))
-                            Text(
-                                text = "${(result.confidence * 100).toInt()}%",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+                            // Crop
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = "Crop",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(Modifier.height(6.dp))
+                                Text(
+                                    text = result.crop,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
 
-                        // Low confidence warning
-                        if (result.confidence < 0.6f) {
                             Spacer(Modifier.height(16.dp))
 
-                            Surface(
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(8.dp),
-                                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f)
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(12.dp),
-                                    verticalAlignment = Alignment.Top
+                            // Disease
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = "Disease",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(Modifier.height(6.dp))
+                                Text(
+                                    text = result.disease,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontWeight = FontWeight.Medium,
+                                    lineHeight = MaterialTheme.typography.titleMedium.lineHeight
+                                )
+                            }
+
+                            Spacer(Modifier.height(16.dp))
+
+                            // Confidence
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = "Confidence",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontWeight = FontWeight.Normal
+                                )
+                                Spacer(Modifier.height(6.dp))
+                                Text(
+                                    text = "${(result.confidence * 100).toInt()}%",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+
+                            // Low confidence warning
+                            if (result.confidence < 0.6f) {
+                                Spacer(Modifier.height(16.dp))
+
+                                Surface(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f)
                                 ) {
-                                    Text(
-                                        text = "⚠️",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        modifier = Modifier.padding(end = 8.dp, top = 2.dp)
-                                    )
-                                    Text(
-                                        text = "Low confidence. Try a clearer image for better results.",
-                                        color = MaterialTheme.colorScheme.error,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        lineHeight = MaterialTheme.typography.bodySmall.lineHeight
-                                    )
+                                    Row(
+                                        modifier = Modifier.padding(12.dp),
+                                        verticalAlignment = Alignment.Top
+                                    ) {
+                                        Text(
+                                            text = "⚠️",
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            modifier = Modifier.padding(end = 8.dp, top = 2.dp)
+                                        )
+                                        Text(
+                                            text = "Low confidence. Try a clearer image for better results.",
+                                            color = MaterialTheme.colorScheme.error,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            lineHeight = MaterialTheme.typography.bodySmall.lineHeight
+                                        )
+                                    }
                                 }
                             }
                         }
